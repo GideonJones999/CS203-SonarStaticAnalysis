@@ -1,5 +1,7 @@
 package edu.byu.cs.sonar;
 
+import java.io.FileNotFoundException;
+
 /**
  * This program has the same functionality of last week's program.
  * The only changes are in comments, the three @Override functions,
@@ -16,7 +18,7 @@ class Main {
      *
      * @param args listed above
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws FileNotFoundException {
         final CustomFileReader reader1 = new CustomFileReader(args[0]);
         final CustomFileReader reader2 = new CustomFileReader(args[1]);
         final CustomFileReader reader3 = new CustomFileReader(args[2]);
