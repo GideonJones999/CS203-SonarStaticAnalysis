@@ -6,6 +6,8 @@ package edu.byu.cs.sonar;
  * a few extra getters, and the use of a String instead of a List
  * for our sentence we create.
  */
+
+@SuppressWarnings("squid:S106")
 class Main {
     /**
      * This program will take four arguments.

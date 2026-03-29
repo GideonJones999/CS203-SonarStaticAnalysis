@@ -1,18 +1,15 @@
 package edu.byu.cs.sonar;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
  * This is a class that will handle the file reading
  */
 class CustomFileReader {
-    /**
-     * The scanner that will read the dictionary
-     */
-    private Scanner s;
-
     /**
      * The sentence that will be constructed
      */
@@ -22,34 +19,47 @@ class CustomFileReader {
      */
     private int count;
 
+  /**
+   * The path to the file to be read
+   */
+  private String path;
+
     /**
      * Constructor for our class
      *
      * @param fileName the file to be read in
      */
     CustomFileReader(final String fileName) {
+        path = fileName;
         newSentence = "";
-        try {
-            s = new Scanner(new FileReader(fileName));
-        } catch (FileNotFoundException c) {
-            newSentence = "This isn't going to work out";
-        } finally {
-            count = 0;
-        }
+        count = 0;
+    }
+
+  /**
+   * Creates a Scanner using the proper encoding
+   *
+   * @return a new Scanner for the file
+   * @throws FileNotFoundException if the file is not found
+   */
+  private Scanner createScanner() throws FileNotFoundException {
+      return new Scanner(new InputStreamReader(
+              new FileInputStream(path), StandardCharsets.UTF_8));
     }
 
     /**
      * This will find how many words are in the text file provided
      *
      * @return how many words in the file
+     * @throws FileNotFoundException if the file is not found
      */
-    int howManyWordsInFile() {
-
+    int howManyWordsInFile() throws FileNotFoundException {
+      try (Scanner s = createScanner()) {
         while (s.hasNext()) {
-            s.next();
-            count++;
+          s.next();
+          count++;
         }
-        return count;
+      }
+      return count;
     }
 
     /**
@@ -57,13 +67,16 @@ class CustomFileReader {
      *
      * @param index which number word should be taken back
      * @return correct word
+     * @throws FileNotFoundException if the file is not found
      */
-    String returnThatWord(final int index) {
-        String returnWord = "";
+    String returnThatWord(final int index) throws FileNotFoundException{
+      String returnWord = "";
+      try (Scanner s = createScanner()) {
         for (int i = 0; i < index; i++) {
-            returnWord = s.next();
+          returnWord = s.next();
         }
-        return returnWord;
+      }
+      return returnWord;
     }
 
     /**
@@ -71,15 +84,16 @@ class CustomFileReader {
      * one provided in the argument and return that word
      *
      * @param letter eventually will be the character we are looking for in the word
+     * @throws FileNotFoundException if the file is not found
      */
-    void findNewWord(final CharSequence letter) {
-        String word = s.next();
-
+    void findNewWord(final CharSequence letter) throws FileNotFoundException {
+      try (Scanner scanner = createScanner()) {
+        String word = scanner.next();
         while (!word.contains(letter)) {
-            word = s.next();
+          word = scanner.next();
         }
-
         newSentence = newSentence + word + " ";
+      }
     }
 
     /**
@@ -144,6 +158,15 @@ class CustomFileReader {
     }
 
     /**
+     * This is a private getter for the file path
+     *
+     * @return the path to the file
+     */
+    private String getPath() {
+      return path;
+    }
+
+    /**
      * Checks if the object being processed is an
      * instance of this exact class. That includes
      * type and member variables.
@@ -167,6 +190,6 @@ class CustomFileReader {
             return false;
         }
 
-        return comparedReader.getScanner() == s;
+        return comparedReader.getScanner().equals(path);
     }
 }
