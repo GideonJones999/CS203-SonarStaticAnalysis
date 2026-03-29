@@ -125,15 +125,6 @@ class CustomFileReader {
     }
 
     /**
-     * This is another private getter
-     *
-     * @return the number of words in the dictionary
-     */
-    private Scanner getScanner() {
-        return s;
-    }
-
-    /**
      * Returns a hash number so this data type can be used for
      * bucketing and stored in a Hash implementation like a
      * HashMap, HashTable, HashSet, etc.
@@ -176,7 +167,7 @@ class CustomFileReader {
      */
     @Override
     public boolean equals(final Object object) {
-        if (object.getClass() != this.getClass()) {
+        if (object == null || object.getClass() != this.getClass()) {
             return false;
         }
 
@@ -190,6 +181,6 @@ class CustomFileReader {
             return false;
         }
 
-        return comparedReader.getScanner().equals(path);
+        return comparedReader.getPath().equals(path);
     }
 }
